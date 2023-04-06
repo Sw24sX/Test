@@ -1,32 +1,70 @@
 package com.example.example.service.impl;
 
+import com.example.example.domain.ItemRepository;
+import com.example.example.domain.ShopRepository;
+import com.example.example.domain.UserInfoRepository;
 import com.example.example.service.ItemServiceApi;
 import com.example.example.service.dto.request.AddItemToShoppingCartRequest;
 import com.example.example.service.dto.request.CreateItemRequest;
 import com.example.example.service.dto.response.ItemDto;
+import com.example.example.service.exception.NotFoundException;
+import com.example.example.service.factory.ItemFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class ItemService implements ItemServiceApi {
+
+    private final ItemRepository itemRepository;
+    private final UserInfoRepository userInfoRepository;
+    private final ShopRepository shopRepository;
+
     @Override
     public ItemDto createItem(CreateItemRequest request) {
-        return null;
+        var shop = shopRepository.findById(request.getShopId())
+                .orElseThrow(() -> new NotFoundException("Shop not found"));
+        var item = ItemFactory.from(request);
+        item.setShop(shop);
+        var result = itemRepository.save(item);
+        return ItemFactory.to(result);
     }
 
     @Override
     public ItemDto addItemToShoppingCart(AddItemToShoppingCartRequest request) {
-        return null;
+        var item = itemRepository.findById(request.getItemId())
+                .orElseThrow(() -> new NotFoundException("Item not found by id %s", request.getItemId()));
+        var user = userInfoRepository.findById(request.getUserInfoId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        user.getItems().add(item);
+        userInfoRepository.save(user);
+        return ItemFactory.to(item);
     }
 
     @Override
     public List<ItemDto> userInfoShoppingCart(Long userInfo) {
-        return null;
+        var user = userInfoRepository.findById(userInfo)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return user.getItems().stream().map(ItemFactory::to).toList();
     }
 
     @Override
     public ItemDto getItemById(Long id) {
-        return null;
+        var item = itemRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Item not found by id %s", id));
+
+        return ItemFactory.to(item);
+    }
+
+    @Override
+    public List<ItemDto> getItemsByUserAndShop(Long userId, Long shopId) {
+        var shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new NotFoundException("Shop not found"));
+        var result = itemRepository.findByShop(shop);
+        return result.stream().map(ItemFactory::to).toList();
     }
 }

@@ -38,4 +38,12 @@ public interface ItemServiceApi {
      * @return Описание предмета
      */
     ItemDto getItemById(Long id);
+
+    /**
+     *
+     * @param userId
+     * @param shopId
+     * @return
+     */
+    List<ItemDto> getItemsByUserAndShop(Long userId, Long shopId);
 }

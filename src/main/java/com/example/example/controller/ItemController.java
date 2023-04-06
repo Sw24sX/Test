@@ -38,4 +38,9 @@ public class ItemController {
     public ItemDto getById(@RequestParam("item_id") Long id) {
         return itemServiceApi.getItemById(id);
     }
+
+    @GetMapping("shopping-cart/list-by-shop")
+    public List<ItemDto> getItemsByUserAndShop(@RequestParam("user_info_id") Long userId, @RequestParam("shop_id") Long shopId) {
+        return itemServiceApi.getItemsByUserAndShop(userId, shopId);
+    }
 }

@@ -14,7 +14,7 @@ public class CreateItemRequest {
 
     @NotNull
     @Min(0)
-    private Double cost;
+    private Integer cost;
 
     @NotNull
     private Long shopId;

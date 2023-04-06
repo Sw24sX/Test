@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="05-04-2023-18-28" author="KorolyovAS">
+        <createTable tableName="item">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="item_pk"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cost" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shop_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="shop">
+            <column name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="shop_pk"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="item"
+                                 baseColumnNames="shop_id"
+                                 constraintName="item_shop_fk"
+                                 referencedTableName="shop"
+                                 referencedColumnNames="id"/>
+
+        <createTable tableName="user_info_item">
+            <column name="user_info_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="user_info_item"
+                                 baseColumnNames="user_info_id"
+                                 constraintName="user_info_item_user_info_id_fk"
+                                 referencedTableName="user_info"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="user_info_item"
+                                 baseColumnNames="item_id"
+                                 constraintName="user_info_item_shop_id_fk"
+                                 referencedTableName="item"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

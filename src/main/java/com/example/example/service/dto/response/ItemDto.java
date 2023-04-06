@@ -12,5 +12,5 @@ public class ItemDto {
     private Long id;
     private String name;
     private Long shopId;
-    private Double cost;
+    private Integer cost;
 }
