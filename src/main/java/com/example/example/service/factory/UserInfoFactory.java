@@ -14,6 +14,7 @@ public class UserInfoFactory {
         var result = new UserInfo();
         result.setName(request.getName());
         result.setSurname(request.getSurname());
+        result.setLogin(request.getUsername());
         return result;
     }
 
@@ -25,7 +26,8 @@ public class UserInfoFactory {
         return new UserInfoDto(
                 userInfo.getId(),
                 userInfo.getName(),
-                userInfo.getSurname()
+                userInfo.getSurname(),
+                userInfo.getLogin()
         );
     }
 }

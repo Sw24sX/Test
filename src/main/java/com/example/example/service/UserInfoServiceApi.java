@@ -1,6 +1,5 @@
 package com.example.example.service;
 
-import com.example.example.service.dto.request.CreateUserInfoRequest;
 import com.example.example.service.dto.response.UserInfoDto;
 
 /**
@@ -15,11 +14,5 @@ public interface UserInfoServiceApi {
      */
     UserInfoDto getUserInfoById(Long id);
 
-    /**
-     * Создать нового пользователя
-     * @param request Параметры для создания нового пользователя
-     * @return Информация о созданном пользователе
-     */
 
-    UserInfoDto createUserInfo(CreateUserInfoRequest request);
 }

@@ -18,7 +18,7 @@ public class ShopController {
         return shopServiceApi.getShopById(id);
     }
 
-    @PostMapping
+    @PostMapping("add")
     private ShopDto create(@RequestBody CreateShopRequest request) {
         return shopServiceApi.createShop(request);
     }

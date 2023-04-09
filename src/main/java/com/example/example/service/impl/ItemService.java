@@ -1,8 +1,8 @@
 package com.example.example.service.impl;
 
-import com.example.example.domain.ItemRepository;
-import com.example.example.domain.ShopRepository;
-import com.example.example.domain.UserInfoRepository;
+import com.example.example.domain.repository.ItemRepository;
+import com.example.example.domain.repository.ShopRepository;
+import com.example.example.domain.repository.UserInfoRepository;
 import com.example.example.service.ItemServiceApi;
 import com.example.example.service.dto.request.AddItemToShoppingCartRequest;
 import com.example.example.service.dto.request.CreateItemRequest;
