@@ -1,5 +1,6 @@
 package com.example.example.controller;
 
+import com.example.example.aspect.LogTimer;
 import com.example.example.service.ItemServiceApi;
 import com.example.example.service.dto.request.AddItemToShoppingCartRequest;
 import com.example.example.service.dto.request.CreateItemRequest;
@@ -25,6 +26,7 @@ public class ItemController {
     }
 
     @PostMapping
+    @LogTimer
     public ItemDto create(@Valid @RequestBody CreateItemRequest createItemRequest) {
         return itemServiceApi.createItem(createItemRequest);
     }
@@ -35,6 +37,7 @@ public class ItemController {
     }
 
     @GetMapping
+    @LogTimer
     public ItemDto getById(@RequestParam("item_id") Long id) {
         return itemServiceApi.getItemById(id);
     }
