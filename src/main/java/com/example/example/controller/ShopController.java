@@ -1,6 +1,5 @@
 package com.example.example.controller;
 
-import com.example.example.aspect.LogTimer;
 import com.example.example.service.ShopServiceApi;
 import com.example.example.service.dto.request.CreateShopRequest;
 import com.example.example.service.dto.response.ShopDto;
@@ -20,8 +19,7 @@ public class ShopController {
     }
 
     @PostMapping("add")
-    @LogTimer
-    public ShopDto create(@RequestBody CreateShopRequest request) {
+    private ShopDto create(@RequestBody CreateShopRequest request) {
         return shopServiceApi.createShop(request);
     }
 }
