@@ -1,7 +1,10 @@
 package com.example.example.service.impl;
 
 import com.example.example.domain.repository.ShopRepository;
+import com.example.example.service.MessageServiceApi;
 import com.example.example.service.ShopServiceApi;
+import com.example.example.service.dto.message.AmqMessage;
+import com.example.example.service.dto.message.RabbitMessage;
 import com.example.example.service.dto.request.CreateShopRequest;
 import com.example.example.service.dto.response.ShopDto;
 import com.example.example.service.exception.NotFoundException;
@@ -15,12 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShopService implements ShopServiceApi {
 
     private final ShopRepository shopRepository;
+    private final MessageServiceApi amqService;
+    private final MessageServiceApi rabbitService;
 
     @Override
     @Transactional
     public ShopDto createShop(CreateShopRequest request) {
         var shop = ShopFactory.from(request);
         var result = shopRepository.save(shop);
+        amqService.send(new AmqMessage("Test message"));
         return ShopFactory.to(result);
     }
 
@@ -28,6 +34,7 @@ public class ShopService implements ShopServiceApi {
     public ShopDto getShopById(Long id) {
         var result = shopRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Shop not found by id %s", id));
+        rabbitService.send(new RabbitMessage("test", 1256));
         return ShopFactory.to(result);
     }
 }

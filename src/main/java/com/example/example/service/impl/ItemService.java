@@ -4,6 +4,8 @@ import com.example.example.domain.repository.ItemRepository;
 import com.example.example.domain.repository.ShopRepository;
 import com.example.example.domain.repository.UserInfoRepository;
 import com.example.example.service.ItemServiceApi;
+import com.example.example.service.MessageServiceApi;
+import com.example.example.service.dto.message.KafkaMessage;
 import com.example.example.service.dto.request.AddItemToShoppingCartRequest;
 import com.example.example.service.dto.request.CreateItemRequest;
 import com.example.example.service.dto.response.ItemDto;
@@ -23,6 +25,7 @@ public class ItemService implements ItemServiceApi {
     private final ItemRepository itemRepository;
     private final UserInfoRepository userInfoRepository;
     private final ShopRepository shopRepository;
+    private final MessageServiceApi kafkaService;
 
     @Override
     public ItemDto createItem(CreateItemRequest request) {
@@ -54,6 +57,7 @@ public class ItemService implements ItemServiceApi {
 
     @Override
     public ItemDto getItemById(Long id) {
+        kafkaService.send(new KafkaMessage("example", true));
         var item = itemRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Item not found by id %s", id));
 
