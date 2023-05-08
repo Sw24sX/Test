@@ -38,6 +38,7 @@ public class SecurityConfig {
         http
             .csrf().disable()
             .authorizeRequests()
+            .antMatchers("/actuator/**").permitAll()
             .antMatchers("/shop/add")
                 .hasAnyRole("ADMIN")
             .antMatchers("/auth/registration")
