@@ -6,6 +6,7 @@ import com.example.example.service.dto.request.CreateShopRequest;
 import com.example.example.service.dto.response.ShopDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("shop")
