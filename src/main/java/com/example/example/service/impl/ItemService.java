@@ -4,14 +4,15 @@ import com.example.example.domain.repository.ItemRepository;
 import com.example.example.domain.repository.ShopRepository;
 import com.example.example.domain.repository.UserInfoRepository;
 import com.example.example.service.ItemServiceApi;
-import com.example.example.service.MessageServiceApi;
-import com.example.example.service.dto.message.KafkaMessage;
 import com.example.example.service.dto.request.AddItemToShoppingCartRequest;
 import com.example.example.service.dto.request.CreateItemRequest;
+import com.example.example.service.dto.request.UpdateItemRequest;
 import com.example.example.service.dto.response.ItemDto;
 import com.example.example.service.exception.NotFoundException;
 import com.example.example.service.factory.ItemFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public class ItemService implements ItemServiceApi {
     private final ItemRepository itemRepository;
     private final UserInfoRepository userInfoRepository;
     private final ShopRepository shopRepository;
-    private final MessageServiceApi kafkaService;
+//    private final MessageServiceApi kafkaService;
 
     @Override
     public ItemDto createItem(CreateItemRequest request) {
@@ -56,8 +57,9 @@ public class ItemService implements ItemServiceApi {
     }
 
     @Override
+    @Cacheable(value = "item", key = "#id")
     public ItemDto getItemById(Long id) {
-        kafkaService.send(new KafkaMessage("example", true));
+//        kafkaService.send(new KafkaMessage("example", true));
         var item = itemRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Item not found by id %s", id));
 
@@ -70,5 +72,15 @@ public class ItemService implements ItemServiceApi {
                 .orElseThrow(() -> new NotFoundException("Shop not found"));
         var result = itemRepository.findByShop(shop);
         return result.stream().map(ItemFactory::to).toList();
+    }
+
+    @Override
+    @CachePut(value = "item", key = "#id")
+    public ItemDto updateItem(Long id, UpdateItemRequest updateItemRequest) {
+        var item = itemRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Item not found by id %s", id));
+        var updated = ItemFactory.update(item, updateItemRequest);
+        var result = itemRepository.save(updated);
+        return ItemFactory.to(result);
     }
 }

@@ -3,6 +3,7 @@ package com.example.example.controller;
 import com.example.example.service.ItemServiceApi;
 import com.example.example.service.dto.request.AddItemToShoppingCartRequest;
 import com.example.example.service.dto.request.CreateItemRequest;
+import com.example.example.service.dto.request.UpdateItemRequest;
 import com.example.example.service.dto.response.ItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +28,10 @@ public class ItemController {
     @PostMapping
     public ItemDto create(@Valid @RequestBody CreateItemRequest createItemRequest) {
         return itemServiceApi.createItem(createItemRequest);
+    }
+    @PutMapping("{id}")
+    public ItemDto update(@PathVariable Long id, @Valid @RequestBody UpdateItemRequest updateItemRequest) {
+        return itemServiceApi.updateItem(id, updateItemRequest);
     }
 
     @PostMapping("shopping-cart/add")

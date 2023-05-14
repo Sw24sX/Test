@@ -2,6 +2,7 @@ package com.example.example.service;
 
 import com.example.example.service.dto.request.AddItemToShoppingCartRequest;
 import com.example.example.service.dto.request.CreateItemRequest;
+import com.example.example.service.dto.request.UpdateItemRequest;
 import com.example.example.service.dto.response.ItemDto;
 
 import java.util.List;
@@ -39,11 +40,7 @@ public interface ItemServiceApi {
      */
     ItemDto getItemById(Long id);
 
-    /**
-     *
-     * @param userId
-     * @param shopId
-     * @return
-     */
     List<ItemDto> getItemsByUserAndShop(Long userId, Long shopId);
+
+    ItemDto updateItem(Long id, UpdateItemRequest updateItemRequest);
 }
